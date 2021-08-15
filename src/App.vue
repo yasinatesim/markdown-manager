@@ -10,12 +10,34 @@
       <label>
         <strong>{{ variable }}</strong
         >:
-        <input type="text" :name="variable" v-model="variables[variable]" />
-        {{ variables[variable] }}
+        <input type="text" v-model="variables[variable]" />
       </label>
       <br />
       <br />
     </div>
+
+    {{ arrays }}
+
+    <div v-for="array in arrays">
+      <div>
+        <strong>{{ Object.keys(array) }}</strong>
+
+        <div v-for="item in array">
+          <div v-for="value in item">
+            <div v-for="key in Object.keys(value)">
+              <span>{{ key }}:</span>
+              <input type="text" v-model="value[key]" />
+            </div>
+          </div>
+
+          <button @click="handleAddInput(item, Object.keys(array))">Add</button>
+          <button @click="handleRemoveInput(item, Object.keys(array))">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
     <button @click="handleGetTemplate">Get Tamplate</button>
   </div>
 
@@ -30,7 +52,7 @@ export default {
     return {
       template: "",
       variables: "",
-      arrays: "",
+      arrays: [],
       result: "",
       step: 1,
     };
@@ -45,6 +67,36 @@ export default {
             .map((item) => item.replace(/[\W]+/g, "").trim())
         ),
       ];
+
+      let arraysRegex =
+        /<%\s\@foreach\s(?<arrayKey>[a-zA-Z]*)\sin\s(?<arrayName>[a-zA-Z]*)\s%>(.|\n|\t)*?<%\s\@endforeach\s%>/gim;
+
+      let match;
+      while ((match = arraysRegex.exec(this.template)) != null) {
+        const {
+          groups: { arrayName },
+        } = match;
+
+        const foreach = match[0]
+          .match(/<%=\s(.*)\s=%>/g)
+          .map((item) => {
+            return item
+              .replace(/<%=\s/g, "")
+              .split(/\s=%>/g)
+              .map((splittedItem) => {
+                return splittedItem.replace(/[^\w.]/g, "");
+              })
+              .filter((item) => item);
+          })
+          .flat();
+
+        this.arrays.push({
+          [arrayName]: [
+            { ...foreach.reduce((acc, curr) => ((acc[curr] = ""), acc), {}) },
+          ],
+        });
+      }
+
       this.step++;
     },
     handleGetTemplate() {
@@ -62,6 +114,22 @@ export default {
       });
 
       this.step++;
+    },
+    handleAddInput(key, array) {
+      const findedArray = this.arrays.find((item) => {
+        return item[array]
+      })
+
+      const obj = Object.keys(Object.values(key)[0]).reduce((acc, curr) => ((acc[curr] = ""), acc), {});
+
+      findedArray[array].push(obj);
+    },
+    handleRemoveInput(key, array) {
+      const deneme = this.arrays.find((item) => {
+        return item[array];
+      });
+
+      console.log(deneme);
     },
   },
 };
