@@ -16,14 +16,12 @@
       <br />
     </div>
 
-    {{ arrays }}
-
     <div v-for="array in arrays">
       <div>
         <strong>{{ Object.keys(array) }}</strong>
 
         <div v-for="item in array">
-          <div v-for="(value,key) in item">
+          <div v-for="(value, key) in item">
             <div v-for="obj in Object.keys(value)">
               <span>{{ obj }}:</span>
               <input type="text" v-model="value[obj]" />
@@ -31,7 +29,10 @@
             <button @click="handleAddInput(item, Object.keys(array))">
               Add
             </button>
-            <button @click="handleRemoveInput(item, Object.keys(array), key)" v-if="item.length > 1">
+            <button
+              @click="handleRemoveInput(item, Object.keys(array), key)"
+              v-if="item.length > 1"
+            >
               Remove
             </button>
           </div>
@@ -54,6 +55,7 @@ export default {
       template: "",
       variables: "",
       arrays: [],
+      foreachs:[],
       result: "",
       step: 1,
     };
@@ -114,6 +116,15 @@ export default {
         return this.variables[matched.replace(/<%=|=%>/g, "").trim()];
       });
 
+      // const arraysRegex =
+      //   /(?<startForeach><%\s\@foreach\s(?<arrayKey>[a-zA-Z]*)\sin\s(?<arrayName>[a-zA-Z]*)\s%>)(?<content>(.|\n|\t)*?)(?<endForeach><%\s\@endforeach\s%>)/gim;
+
+      // let match = arraysRegex.exec(this.template);
+      //   const {
+      //     groups: { startForeach, endForeach, arrayKey, arrayName, content },
+      //   } = match;
+
+
       this.step++;
     },
     handleAddInput(key, array) {
@@ -129,8 +140,6 @@ export default {
       findedArray[array].push(obj);
     },
     handleRemoveInput(key, array, index) {
-      console.log('key:', key)
-      console.log('index:', index)
       const findedArray = this.arrays.find((item) => {
         return item[array];
       });
