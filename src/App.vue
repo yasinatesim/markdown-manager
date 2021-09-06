@@ -134,24 +134,24 @@ See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for mo
           groups: { startForeach, endForeach, arrayKey, arrayName, content },
         } = match;
 
-          const foreach = match[0]
-            .match(/<%=\s(.*)\s=%>/g)
-            .map((item) => {
-              return item
-                .replace(/<%=\s/g, "")
-                .split(/\s=%>/g)
-                .map((splittedItem) => {
-                  return splittedItem.replace(/[^\w.]/g, "");
-                })
-                .filter((item) => item);
-            })
-            .flat();
+        const foreach = match[0]
+          .match(/<%=\s(.*)\s=%>/g)
+          .map((item) => {
+            return item
+              .replace(/<%=\s/g, "")
+              .split(/\s=%>/g)
+              .map((splittedItem) => {
+                return splittedItem.replace(/[^\w.]/g, "");
+              })
+              .filter((item) => item);
+          })
+          .flat();
 
-            const values = {
-              [arrayName]: [
-                { ...foreach.reduce((acc, curr) => ((acc[curr] = ""), acc), {}) },
-              ],
-            }
+        const values = {
+          [arrayName]: [
+            { ...foreach.reduce((acc, curr) => ((acc[curr] = ""), acc), {}) },
+          ],
+        };
 
         this.arrays.push({
           startForeach,
@@ -160,6 +160,7 @@ See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for mo
           arrayName,
           content,
           values,
+          match: match[0],
         });
       }
 
@@ -187,10 +188,10 @@ See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for mo
         return this.variables[matched.replace(/<%=|=%>/g, "").trim()];
       });
 
-        // const startForeach = new RegExp(/<%=\s([a-zA-Z.]+)\s=%>/, "g");
+      // const startForeach = new RegExp(/<%=\s([a-zA-Z.]+)\s=%>/, "g");
 
-            // const startForeach = new RegExp(startForeachStr, "g");
-            // this.result = this.result.replace(startForeach, `console.log('deneme')`);
+      // const startForeach = new RegExp(startForeachStr, "g");
+      // this.result = this.result.replace(startForeach, `console.log('deneme')`);
 
       // https://www.codegrepper.com/code-examples/javascript/js+execute+string
       // https://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
@@ -202,6 +203,17 @@ See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for mo
 
       // const endForeach = new RegExp(endForEachStr, "g");
       // this.result = this.result.replace(endForeach, '');
+
+      this.arrays.forEach((array) => {
+        array.values[array.arrayName].forEach((item, index) => {
+          Object.keys(item).forEach((key) => {
+            const regex = new RegExp(`<%=\\s${key}\\s=%>`, "g");
+            this.result = this.result.replace(regex, (matched) => {
+              return item[key];
+            });
+          });
+        });
+      });
 
       this.step++;
     },
