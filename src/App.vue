@@ -51,65 +51,68 @@
 </template>
 
 <script>
+import handlebars from "handlebars";
+
 export default {
   data() {
     return {
       template: `<h3 align="center">
   <br />
-   <a  href="<%= GITHUB_URL =%>"><img src="<%= PROJECT_LOGO =%>" alt="<%= PROJECT_NAME =%>" width="200" /></a>
+   <a  href="{{GITHUB_URL}}"><img src="{{PROJECT_LOGO}}" alt="{{PROJECT_NAME}}" width="200" /></a>
   <br />
-<%= PROJECT_NAME =%>
+{{PROJECT_NAME}}
   <br />
 </h3>
 
 <hr />
 
-<p  align="center"><%= PROJECT_DESCRIPTION =%></p>
+<p  align="center">{{PROJECT_DESCRIPTION}}</p>
 
 
   <p align="center">
-<% @foreach item in links %>
-· <a  href="<%= item.link =%>"><%= item.label =%></a>
-<% @endforeach %>
+{{#links}}
+· <a  href="{{link}}">{{label}}</a>
+{{/links}}
   </p>
 
 ## 📖 About
 
-<%= PROJECT_ABOUT =%>
+{{PROJECT_ABOUT}}
 
 ### 📚Tech Stack
 
 <table>
-<% @foreach tech in techStacks %>
-  <tr>
-    <td> <a href="<%= tech.url =%>"><%= tech.name =%></a></td>
-    <td><%= tech.description =%></td>
-  </tr>
-<% @endforeach %>
+{{#techStacks}}
+<tr>
+  <td> <a href="{{url}}">{{name}}</a></td>
+  <td>{{description}}</td>
+</tr>
+{{/techStacks}}
 </table>
 
 ## 🧐 What's inside?
 
-<%= WHATS_INSIDE =%>
+{{WHATS_INSIDE}}
 
 ## Getting Started
 
 ### 📦 Prerequisites
 
-<%= PREREQUISITES =%>
+{{PREREQUISITES}}
 
 ### ⚙️ How To Use
 
-<%= HOW_TO_USE =%>
+{{HOW_TO_USE}}
 
 ## 🔑 License
 
-* Copyright © <%= YEAR =%> - <%= LICENSE_NAME =%> License.
+* Copyright © {{YEAR}} - {{LICENSE_NAME}} License.
 
-See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for more information.
+See [LICENSE]({{GITHUB_URL}}/blob/{{GITHUB_MAIN_BRANCH}}/LICENSE) for more information.
 `,
       variables: "",
       arrays: [],
+      foreachs: [],
       result: "",
       step: 1,
     };
@@ -120,28 +123,28 @@ See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for mo
       this.variables = [
         ...new Set(
           this.template
-            .match(/<%=\s([A-Z_]+)+\s=%>/g)
+            .match(/{{([A-Z_]+)+}}/g)
             .map((item) => item.replace(/[\W]+/g, "").trim())
         ),
       ];
 
       let arraysRegex =
-        /(?<startForeach><%\s\@foreach\s(?<arrayKey>[a-zA-Z]*)\sin\s(?<arrayName>[a-zA-Z]*)\s%>)(?<content>(.|\n|\t)*?)(?<endForeach><%\s\@endforeach\s%>)/gim;
+        /({{#(?<arrayName>[a-zA-Z]*)}}(?<content>(.|\n|\t)*?){{\/(.*)}})/gim;
 
       let match;
       while ((match = arraysRegex.exec(this.template)) != null) {
         const {
-          groups: { startForeach, endForeach, arrayKey, arrayName, content },
+          groups: { arrayName, content },
         } = match;
 
-        const foreach = match[0]
-          .match(/<%=\s(.*)\s=%>/g)
+        const foreach = content
+          .match(/{{(.*)}}/g)
           .map((item) => {
             return item
-              .replace(/<%=\s/g, "")
-              .split(/\s=%>/g)
+              .replace(/{{/g, "")
+              .split(/}}/g)
               .map((splittedItem) => {
-                return splittedItem.replace(/[^\w.]/g, "");
+                return splittedItem.replace(/[^\w]/g, "");
               })
               .filter((item) => item);
           })
@@ -154,66 +157,26 @@ See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for mo
         };
 
         this.arrays.push({
-          startForeach,
-          endForeach,
-          arrayKey,
           arrayName,
-          content,
           values,
-          match: match[0],
         });
       }
 
       this.step++;
     },
     handleGetTemplate() {
-      const variableKeys = Object.keys(this.variables);
-
-      // arrays filter with foreachs same item
-
-      // const startForEachs = this.foreachs.map(foreach => foreach.startForeach);
-      // const endForEachs = this.foreachs.map(foreach => foreach.endForeach);
-
-      const variablesRegexStr = variableKeys
-        .map((item) => {
-          return `<%=\\s(${item})\\s=%>`;
+      const arrays = this.arrays
+        .map((array) => {
+          return array.values;
         })
-        .join("|");
+        .reduce((obj, item) => {
+          const key = Object.keys(item)[0];
+          obj[key] = item[key];
+          return obj;
+        }, {});
 
-      // const startForeachStr = startForEachs.join("|");
-      // const endForEachStr = endForEachs.join("|");
-
-      const variablesRegex = new RegExp(variablesRegexStr, "g");
-      this.result = this.template.replace(variablesRegex, (matched) => {
-        return this.variables[matched.replace(/<%=|=%>/g, "").trim()];
-      });
-
-      // const startForeach = new RegExp(/<%=\s([a-zA-Z.]+)\s=%>/, "g");
-
-      // const startForeach = new RegExp(startForeachStr, "g");
-      // this.result = this.result.replace(startForeach, `console.log('deneme')`);
-
-      // https://www.codegrepper.com/code-examples/javascript/js+execute+string
-      // https://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
-      // https://github.com/krasimir/absurd/blob/master/lib/processors/html/helpers/TemplateEngine.js
-      //https://blog.stevenlevithan.com/archives/javascript-match-nested
-
-      // const startForeach = new RegExp(startForeachStr, "g");
-      // this.result = this.result.replace(startForeach, `console.log('deneme')`);
-
-      // const endForeach = new RegExp(endForEachStr, "g");
-      // this.result = this.result.replace(endForeach, '');
-
-      this.arrays.forEach((array) => {
-        array.values[array.arrayName].forEach((item, index) => {
-          Object.keys(item).forEach((key) => {
-            const regex = new RegExp(`<%=\\s${key}\\s=%>`, "g");
-            this.result = this.result.replace(regex, (matched) => {
-              return item[key];
-            });
-          });
-        });
-      });
+      const template = handlebars.compile(this.template);
+      this.result = template({ ...this.variables, ...arrays });
 
       this.step++;
     },
