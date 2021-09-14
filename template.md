@@ -1,53 +1,53 @@
 <h3 align="center">
   <br />
-   <a  href="<%= GITHUB_URL =%>"><img src="<%= PROJECT_LOGO =%>" alt="<%= PROJECT_NAME =%>" width="200" /></a>
+   <a  href="{{GITHUB_URL}}"><img src="{{PROJECT_LOGO}}" alt="{{PROJECT_NAME}}" width="200" /></a>
   <br />
-<%= PROJECT_NAME =%>
+{{PROJECT_NAME}}
   <br />
 </h3>
 
 <hr />
 
-<p  align="center"><%= PROJECT_DESCRIPTION =%></p>
+<p  align="center">{{PROJECT_DESCRIPTION}}</p>
 
 
   <p align="center">
-<% @foreach item in links %>
-· <a  href="<%= item.link =%>"><%= item.label =%></a>
-<% @endforeach %>
+{{#links}}
+· <a  href="{{link}}">{{label}}</a>
+{{/links}}
   </p>
 
 ## 📖 About
 
-<%= PROJECT_ABOUT =%>
+{{PROJECT_ABOUT}}
 
 ### 📚Tech Stack
 
 <table>
-<% @foreach tech in techStacks %>
-  <tr>
-    <td> <a href="<%= tech.url =%>"><%= tech.name =%></a></td>
-    <td><%= tech.description =%></td>
-  </tr>
-<% @endforeach %>
+{{#techStacks}}
+<tr>
+  <td> <a href="{{url}}">{{name}}</a></td>
+  <td>{{description}}</td>
+</tr>
+{{/techStacks}}
 </table>
 
 ## 🧐 What's inside?
 
-<%= WHATS_INSIDE =%>
+{{WHATS_INSIDE}}
 
 ## Getting Started
 
 ### 📦 Prerequisites
 
-<%= PREREQUISITES =%>
+{{PREREQUISITES}}
 
 ### ⚙️ How To Use
 
-<%= HOW_TO_USE =%>
+{{HOW_TO_USE}}
 
 ## 🔑 License
 
-* Copyright © <%= YEAR =%> - <%= LICENSE_NAME =%> License.
+* Copyright © {{YEAR}} - {{LICENSE_NAME}} License.
 
-See [LICENSE](<%= GITHUB_URL =%>/blob/<%= GITHUB_MAIN_BRANCH =%>/LICENSE) for more information.
+See [LICENSE]({{GITHUB_URL}}/blob/{{GITHUB_MAIN_BRANCH}}/LICENSE) for more information.
