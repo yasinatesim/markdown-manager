@@ -1,52 +1,51 @@
 <template>
-  <div v-if="step == 1">
-    <textarea v-model="template" cols="30" rows="10"></textarea>
-    <br /><br />
-    <button @click="handleSubmit">Submit</button>
-  </div>
-
-  {{ arrays }}
-
-  <div v-if="step == 2">
-    <div v-for="variable in variables">
-      <label>
-        <strong>{{ variable }}</strong
-        >:
-        <input type="text" v-model="variables[variable]" />
-      </label>
-      <br />
-      <br />
+  <div class="container mx-auto my-16">
+    <div v-if="step == 1">
+      <textarea class="p-6 placeholder-blue-300 text-dark-600 relative bg-white  text-sm border border-blue-400 outline-none focus:outline-none focus:ring w-full" v-model="template" cols="30" rows="10"></textarea>
+      <br /><br />
+      <button @click="handleSubmit" class="bg-blue-800 text-white text-sm font-bold  px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150">Submit</button>
     </div>
 
-    <div v-for="array in arrays">
-      <div>
-        <strong>{{ String(Object.keys(array.values)) }}</strong>
+    <div v-if="step == 2">
+      <div v-for="variable in variables">
+        <label class="flex items-center py-6 border-b border-gray-300">
+          <strong>{{ variable }}</strong
+          >:
+          <input type="text" v-model="variables[variable]"  class="ml-2 p-2 text-dark-600 relative bg-white text-xs border border-blue-400 outline-none focus:outline-none focus:ring w-full"/>
+        </label>
 
-        <div v-for="item in array.values">
-          <div v-for="(value, key) in item">
-            <div v-for="obj in Object.keys(value)">
-              <span>{{ obj }}:</span>
-              <input type="text" v-model="value[obj]" />
+      </div>
+
+      <div v-for="array in arrays" class="mt-4">
+        <div class="border-b pb-3 border-gray-300">
+          <strong>{{ String(Object.keys(array.values)) }}</strong>
+
+          <div v-for="item in array.values">
+            <div v-for="(value, key) in item"> <!-- //  border-b border-gray-300 -->
+              <div v-for="obj in Object.keys(value)" class="flex items-center py-6">
+                <span>{{ obj }}:</span>
+                <input type="text" v-model="value[obj]"  class="ml-2 p-2 text-dark-600 relative bg-white text-xs border border-pink-400 outline-none focus:outline-none focus:ring w-full"/>
+              </div>
+              <button @click="handleAddInput(item, Object.keys(array.values))" class="bg-pink-800 text-white text-sm font-bold  px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                Add
+              </button>
+              <button
+                @click="handleRemoveInput(Object.keys(array.values), key)"
+                v-if="item.length > 1"
+              >
+                Remove
+              </button>
             </div>
-            <button @click="handleAddInput(item, Object.keys(array.values))">
-              Add
-            </button>
-            <button
-              @click="handleRemoveInput(Object.keys(array.values), key)"
-              v-if="item.length > 1"
-            >
-              Remove
-            </button>
           </div>
         </div>
       </div>
+
+      <button @click="handleGetTemplate" class="bg-blue-800 text-white text-sm font-bold  px-6 py-3 mt-6 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150">Get Tamplate</button>
     </div>
 
-    <button @click="handleGetTemplate">Get Tamplate</button>
-  </div>
-
-  <div v-if="step == 3">
-    <textarea cols="70" rows="70" readonly>{{ result }}</textarea>
+    <div v-if="step == 3">
+      <textarea cols="70" rows="70" readonly class="p-6 placeholder-blue-300 text-dark-600 relative bg-white  text-sm border border-blue-800  w-full">{{ result }}</textarea>
+    </div>
   </div>
 </template>
 
