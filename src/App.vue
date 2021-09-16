@@ -111,7 +111,6 @@ See [LICENSE]({{GITHUB_URL}}/blob/{{GITHUB_MAIN_BRANCH}}/LICENSE) for more infor
 `,
       variables: "",
       arrays: [],
-      foreachs: [],
       result: "",
       step: 1,
     };
