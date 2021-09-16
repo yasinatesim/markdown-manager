@@ -51,3 +51,7 @@
 * Copyright © {{YEAR}} - {{LICENSE_NAME}} License.
 
 See [LICENSE]({{GITHUB_URL}}/blob/{{GITHUB_MAIN_BRANCH}}/LICENSE) for more information.
+
+---
+
+_This README was generated with by [markdown-manager](https://github.com/kefranabg/markdown-manager)_ 🥲

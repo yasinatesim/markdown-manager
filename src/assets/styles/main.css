@@ -2,3 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.btn-primary {
+  @apply bg-blue-800 text-white text-sm font-bold px-6 py-3 mt-6 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150;
+}
+
+.btn-danger {
+  @apply  bg-pink-800 text-white text-sm font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none  ease-linear transition-all duration-150;
+}
+
+.btn-success {
+  @apply bg-green-800 text-white text-sm font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150;
+}
