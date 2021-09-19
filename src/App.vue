@@ -75,6 +75,8 @@ export default {
       const template = handlebars.compile(this.template);
       this.result = template({ ...this.variables, ...arrays });
 
+      this.result = this.result.replace(/&#x60;/g, '`');
+
       this.copyDoiToClipboard(this.result);
 
       this.step++;
