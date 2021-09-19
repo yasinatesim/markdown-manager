@@ -1,17 +1,17 @@
 <script>
-import handlebars from "handlebars";
+import handlebars from 'handlebars';
 
 // Components
-import Alert from "./components/alert.vue";
-import Button from "./components/button.vue";
+import Alert from './components/alert.vue';
+import Button from './components/button.vue';
 
 export default {
   data() {
     return {
-      template: "",
+      template: '',
       variables: [],
       arrays: [],
-      result: "",
+      result: '',
       step: 1,
     };
   },
@@ -25,15 +25,10 @@ export default {
     },
     handleSubmit() {
       this.variables = [
-        ...new Set(
-          this.template
-            .match(/{{([A-Z_]+)+}}/g)
-            .map((item) => item.replace(/[\W]+/g, "").trim())
-        ),
+        ...new Set(this.template.match(/{{([A-Z_]+)+}}/g).map((item) => item.replace(/[\W]+/g, '').trim())),
       ];
 
-      let arraysRegex =
-        /({{#(?<arrayName>[a-zA-Z]*)}}(?<content>(.|\n|\t)*?){{\/(.*)}})/gim;
+      let arraysRegex = /({{#(?<arrayName>[a-zA-Z]*)}}(?<content>(.|\n|\t)*?){{\/(.*)}})/gim;
 
       let match;
       while ((match = arraysRegex.exec(this.template)) != null) {
@@ -45,19 +40,17 @@ export default {
           .match(/{{(.*)}}/g)
           .map((item) => {
             return item
-              .replace(/{{/g, "")
+              .replace(/{{/g, '')
               .split(/}}/g)
               .map((splittedItem) => {
-                return splittedItem.replace(/[^\w]/g, "");
+                return splittedItem.replace(/[^\w]/g, '');
               })
               .filter((item) => item);
           })
           .flat();
 
         const values = {
-          [arrayName]: [
-            { ...foreach.reduce((acc, curr) => ((acc[curr] = ""), acc), {}) },
-          ],
+          [arrayName]: [{ ...foreach.reduce((acc, curr) => ((acc[curr] = ''), acc), {}) }],
         };
 
         this.arrays.push({
@@ -91,10 +84,7 @@ export default {
         return item.values[array];
       });
 
-      const obj = Object.keys(Object.values(key)[0]).reduce(
-        (acc, curr) => ((acc[curr] = ""), acc),
-        {}
-      );
+      const obj = Object.keys(Object.values(key)[0]).reduce((acc, curr) => ((acc[curr] = ''), acc), {});
 
       findedArray.values[array].push(obj);
     },
@@ -130,9 +120,7 @@ export default {
         rows="10"
       ></textarea>
       <br /><br />
-      <Button @click="handleSubmit" variant="primary" class="mr-1 mb-1 w-full">
-        Submit
-      </Button>
+      <Button @click="handleSubmit" variant="primary" class="mr-1 mb-1 w-full"> Submit </Button>
     </div>
 
     <div v-if="step == 2">
@@ -140,7 +128,7 @@ export default {
         <label class="flex items-center py-6 border-b border-gray-300">
           <strong>{{ variable }}</strong
           >:
-          <input
+          <textarea
             type="text"
             v-model="variables[variable]"
             class="
@@ -155,7 +143,7 @@ export default {
               focus:outline-none focus:ring
               w-full
             "
-          />
+          ></textarea>
         </label>
       </div>
 
@@ -165,10 +153,7 @@ export default {
 
           <div v-for="item in array.values">
             <div v-for="(value, key) in item">
-              <div
-                v-for="obj in Object.keys(value)"
-                class="flex items-center py-6"
-              >
+              <div v-for="obj in Object.keys(value)" class="flex items-center py-6">
                 <span>{{ obj }}:</span>
                 <input
                   type="text"
@@ -187,10 +172,7 @@ export default {
                   "
                 />
               </div>
-              <Button
-                @click="handleAddInput(item, Object.keys(array.values))"
-                class="mr-1 mb-1" variant="success"
-              >
+              <Button @click="handleAddInput(item, Object.keys(array.values))" class="mr-1 mb-1" variant="success">
                 Add
               </Button>
               <Button
@@ -206,35 +188,19 @@ export default {
         </div>
       </div>
 
-      <Button
-        @click="handleGetTemplate"
-        variant="primary"
-        class="mr-1 mb-1 w-full"
-      >
-        Get Template
-      </Button>
+      <Button @click="handleGetTemplate" variant="primary" class="mr-1 mb-1 w-full"> Get Template </Button>
     </div>
 
     <div v-if="step == 3">
       <Alert />
-      <div class="flex">
-        <textarea
+      <div>
+        <pre
           cols="70"
           rows="70"
           readonly
-          class="
-            p-6
-            placeholder-blue-300
-            text-dark-600
-            relative
-            bg-white
-            text-sm
-            border border-blue-800
-            w-1/2
-          "
-          >{{ result }}</textarea
+          class="rıunded p-6 text-dark-600 relative bg-white text-sm border border-blue-800 w-full"
         >
-
+          <code>{{ result }}</code></pre>
       </div>
     </div>
   </div>
