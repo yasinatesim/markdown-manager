@@ -41,7 +41,7 @@ What if there was an implementation in Markdown that allows defining variables a
 
 ## 🧐 What's inside?
 
-There is a sample file in the *templates* directory. You can create your own markdown template by changing this file. The &#x60;each&#x60; and &#x60;variable definition&#x60; features in the [Handlebars](https://handlebarsjs.com/) structure are available
+There is a sample file in the **templates** directory. You can create your own markdown template by changing this file. The `each` and **variable definition** features in the [Handlebars](https://handlebarsjs.com/) structure are available
 
 ## Getting Started
 
@@ -53,7 +53,7 @@ There is a sample file in the *templates* directory. You can create your own mar
 
 ### ⚙️ How To Use
 
-You can create your own markdown template by modifying the example file in the *templates* folder. Afterwards, it is enough to paste the template pattern into the &#x60;textarea&#x60; area and follow the steps.
+You can create your own markdown template by modifying the example file in the **templates** folder. Afterwards, it is enough to paste the template pattern into the `textarea` area and follow the steps.
 
 ## 🔑 License
 
