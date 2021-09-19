@@ -67,4 +67,4 @@ See [LICENSE](https://github.com/yasinatesim/markdown-manager/blob/master/LICENS
 
 ---
 
-_This README was generated with by [markdown-manager](https://github.com/kefranabg/markdown-manager)_ 🥲
+_This README was generated with by [markdown-manager](https://github.com/yasinatesim/markdown-manager)_ 🥲
