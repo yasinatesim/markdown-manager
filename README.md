@@ -33,6 +33,10 @@ What if there was an implementation in Markdown that allows defining variables a
   <td> <a href="https://vitejs.dev/">Vite</a></td>
   <td>Next Generation Frontend Tooling</td>
 </tr>
+  <tr>
+  <td> <a href="https://tailwindcss.com/">Tailwind CSS</a></td>
+  <td>A utility-first CSS framework for rapidly building custom designs.</td>
+</tr>
 <tr>
   <td> <a href="https://editorconfig.org/">Editorconfig</a></td>
   <td>Helps maintain consistent coding styles for my working on the same project across various editors and IDEs</td>
